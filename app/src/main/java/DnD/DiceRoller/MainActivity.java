@@ -20,6 +20,14 @@ import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
     int EDIT_TEXT_INDEX = 2;
+    String[] texts = {
+            "d20",
+            "d12",
+            "d10",
+            "d8",
+            "d6",
+            "d4"
+    };
     public Dice[] dices = {
             new Dice(20),
             new Dice(12),
@@ -49,7 +57,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(mainLayout);
 
         Context context = mainLayout.getContext();
-        String[] texts = new String[]{"d20", "d12", "d10", "d8", "d6", "d4"};
         for (int i = 0; i < texts.length; ++i) {
             LinearLayout layout = createDiceLayout(context, texts[i]);
             diceLayouts[i] = layout;
