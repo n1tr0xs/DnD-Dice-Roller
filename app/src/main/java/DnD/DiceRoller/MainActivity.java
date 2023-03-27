@@ -20,6 +20,8 @@ import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
     int EDIT_TEXT_INDEX = 2;
+    int ADV_CHECK_INDEX = 4;
+    int DIS_CHECK_INDEX = 5;
     String[] texts = {
             "d20",
             "d12",
@@ -72,8 +74,8 @@ public class MainActivity extends AppCompatActivity {
                 LinearLayout layout = diceLayouts[i];
                 EditText editText = (EditText) layout.getChildAt(EDIT_TEXT_INDEX);
                 CheckBox
-                        checkAdv = (CheckBox) layout.getChildAt(4),
-                        checkDis = (CheckBox) layout.getChildAt(5);
+                        checkAdv = (CheckBox) layout.getChildAt(ADV_CHECK_INDEX),
+                        checkDis = (CheckBox) layout.getChildAt(DIS_CHECK_INDEX);
 
                 int d = (editText.getText().toString().trim().length() == 0) ? 0 : Integer.parseInt(editText.getText().toString());
                 int[] rolls = dices[i].roll(d, checkAdv.isChecked(), checkDis.isChecked());
