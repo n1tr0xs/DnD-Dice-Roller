@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
+    int EDIT_TEXT_INDEX = 2;
     public Dice[] dices = new Dice[]{
             new Dice(20),
             new Dice(12),
@@ -28,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout mainLayout;
     LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
     LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
+    LinearLayout.LayoutParams mainLayoutBtnParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+    LinearLayout.LayoutParams diceLayoutBtnParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
     LinearLayout[] diceLayouts = new LinearLayout[dices.length];
     TextView[] resultViews = new TextView[dices.length];
     TextView sumView;
@@ -39,9 +42,8 @@ public class MainActivity extends AppCompatActivity {
         mainLayout = new LinearLayout(this);
         mainLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         mainLayout.setOrientation(LinearLayout.VERTICAL);
-
-
         setContentView(mainLayout);
+
         Context context = mainLayout.getContext();
         String[] texts = new String[]{"d20", "d12", "d10", "d8", "d6", "d4"};
         for (int i = 0; i < texts.length; ++i) {
@@ -52,12 +54,12 @@ public class MainActivity extends AppCompatActivity {
 
         Button button = new Button(context);
         button.setText("Roll");
-        button.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        button.setLayoutParams(mainLayoutBtnParams);
         button.setOnClickListener(view -> {
             int sum = 0;
             for (int i = 0; i < diceLayouts.length; ++i) {
                 LinearLayout layout = diceLayouts[i];
-                EditText editText = (EditText) layout.getChildAt(2);
+                EditText editText = (EditText) layout.getChildAt(EDIT_TEXT_INDEX);
                 int d = (editText.getText().toString().trim().length() == 0) ? 0 : Integer.parseInt(editText.getText().toString());
                 int[] rolls = dices[i].roll(d);
                 int tmp = Arrays.stream(rolls).sum();
@@ -87,14 +89,13 @@ public class MainActivity extends AppCompatActivity {
 
         Button btnReset = new Button(context);
         btnReset.setText("Reset");
-        btnReset.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+        btnReset.setLayoutParams(mainLayoutBtnParams);
         btnReset.setOnClickListener(view -> {
-            for (LinearLayout layout : diceLayouts) {
-                EditText editText = (EditText) layout.getChildAt(2);
+            for (int i=0; i<diceLayouts.length; ++i) {
+                EditText editText = (EditText) diceLayouts[i].getChildAt(EDIT_TEXT_INDEX);
                 editText.setText("0");
+                resultViews[i].setText("");
             }
-            for (TextView textView : resultViews)
-                textView.setText("");
             sumView.setText("");
         });
         mainLayout.addView(btnReset);
@@ -102,8 +103,6 @@ public class MainActivity extends AppCompatActivity {
 
     @SuppressLint("ClickableViewAccessibility")
     private LinearLayout createDiceLayout(Context parentContext, String text) {
-        LinearLayout.LayoutParams btnParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-
         LinearLayout layout = new LinearLayout(parentContext);
         layout.setOrientation(LinearLayout.HORIZONTAL);
         layout.setLayoutParams(layoutParams);
@@ -117,24 +116,20 @@ public class MainActivity extends AppCompatActivity {
 
         Button buttonMinus = new Button(context);
         buttonMinus.setText("-");
-        buttonMinus.setLayoutParams(btnParams);
+        buttonMinus.setLayoutParams(diceLayoutBtnParams);
         buttonMinus.setOnClickListener(view -> {
-            LinearLayout layout1 = (LinearLayout) view.getParent();
-            EditText editText = (EditText) layout1.getChildAt(2);
-            if (editText.getText().toString().trim().length() == 0) {
+            EditText editText = (EditText) layout.getChildAt(EDIT_TEXT_INDEX);
+            if (editText.getText().toString().trim().length() == 0)
                 editText.setText("1");
-                return;
-            }
-            editText.setText(String.valueOf(Math.max(Integer.parseInt(editText.getText().toString()) - 1, 0)));
+            else
+                editText.setText(String.valueOf(Math.max(Integer.parseInt(editText.getText().toString()) - 1, 0)));
         });
         buttonMinus.setOnTouchListener(new RepeatListener(400, 100, view -> {
-            LinearLayout layout12 = (LinearLayout) view.getParent();
-            EditText editText = (EditText) layout12.getChildAt(2);
-            if (editText.getText().toString().trim().length() == 0) {
+            EditText editText = (EditText) layout.getChildAt(EDIT_TEXT_INDEX);
+            if (editText.getText().toString().trim().length() == 0)
                 editText.setText("1");
-                return;
-            }
-            editText.setText(String.valueOf(Math.max(Integer.parseInt(editText.getText().toString()) - 1, 0)));
+            else
+                editText.setText(String.valueOf(Math.max(Integer.parseInt(editText.getText().toString()) - 1, 0)));
         }));
         layout.addView(buttonMinus);
 
@@ -152,24 +147,20 @@ public class MainActivity extends AppCompatActivity {
 
         Button buttonPlus = new Button(context);
         buttonPlus.setText("+");
-        buttonPlus.setLayoutParams(btnParams);
+        buttonPlus.setLayoutParams(diceLayoutBtnParams);
         buttonPlus.setOnClickListener(view -> {
-            LinearLayout layout13 = (LinearLayout) view.getParent();
-            EditText editText1 = (EditText) layout13.getChildAt(2);
-            if (editText1.getText().toString().trim().length() == 0) {
+            EditText editText1 = (EditText) layout.getChildAt(EDIT_TEXT_INDEX);
+            if (editText1.getText().toString().trim().length() == 0)
                 editText1.setText("1");
-                return;
-            }
-            editText1.setText(String.valueOf(Integer.parseInt(editText1.getText().toString()) + 1));
+            else
+                editText1.setText(String.valueOf(Integer.parseInt(editText1.getText().toString()) + 1));
         });
         buttonPlus.setOnTouchListener(new RepeatListener(400, 100, view -> {
-            LinearLayout layout14 = (LinearLayout) view.getParent();
-            EditText editText12 = (EditText) layout14.getChildAt(2);
-            if (editText12.getText().toString().trim().length() == 0) {
+            EditText editText12 = (EditText) layout.getChildAt(EDIT_TEXT_INDEX);
+            if (editText12.getText().toString().trim().length() == 0)
                 editText12.setText("1");
-                return;
-            }
-            editText12.setText(String.valueOf(Integer.parseInt(editText12.getText().toString()) + 1));
+            else
+                editText12.setText(String.valueOf(Integer.parseInt(editText12.getText().toString()) + 1));
         }));
         layout.addView(buttonPlus);
 
