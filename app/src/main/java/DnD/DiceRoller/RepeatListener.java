@@ -65,7 +65,9 @@ public class RepeatListener implements OnTouchListener {
         }
 
         return false;
-    }    private final Runnable handlerRunnable = new Runnable() {
+    }
+
+    private final Runnable handlerRunnable = new Runnable() {
         @Override
         public void run() {
             if (touchedView.isEnabled()) {
@@ -79,8 +81,6 @@ public class RepeatListener implements OnTouchListener {
             }
         }
     };
-
-
 
 
 }
