@@ -65,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
                 sum += tmp;
                 resultViews[i].setText(dices[i].getName() + ": " + Arrays.toString(rolls) + " = " + tmp);
             }
-            Toast.makeText(mainLayout.getContext(), "Rolled", Toast.LENGTH_SHORT).show();
             sumView.setText(String.valueOf(sum));
         });
         mainLayout.addView(button);
