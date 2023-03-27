@@ -19,6 +19,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
+    public Dice[] dices = {
+            new Dice(20),
+            new Dice(12),
+            new Dice(10),
+            new Dice(8),
+            new Dice(6),
+            new Dice(4),
+    };
     int EDIT_TEXT_INDEX = 2;
     int ADV_CHECK_INDEX = 4;
     int DIS_CHECK_INDEX = 5;
@@ -29,14 +37,6 @@ public class MainActivity extends AppCompatActivity {
             "d8",
             "d6",
             "d4"
-    };
-    public Dice[] dices = {
-            new Dice(20),
-            new Dice(12),
-            new Dice(10),
-            new Dice(8),
-            new Dice(6),
-            new Dice(4),
     };
     LinearLayout mainLayout;
     LinearLayout[] diceLayouts = new LinearLayout[dices.length];
