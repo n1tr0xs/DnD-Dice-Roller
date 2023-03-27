@@ -11,7 +11,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -28,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     };
     LinearLayout mainLayout;
     LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-    LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
+    LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
     LinearLayout[] diceLayouts = new LinearLayout[dices.length];
     TextView[] resultViews = new TextView[dices.length];
     TextView sumView;
@@ -40,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         mainLayout = new LinearLayout(this);
         mainLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         mainLayout.setOrientation(LinearLayout.VERTICAL);
+
 
         setContentView(mainLayout);
         Context context = mainLayout.getContext();
@@ -58,8 +58,7 @@ public class MainActivity extends AppCompatActivity {
             for (int i = 0; i < diceLayouts.length; ++i) {
                 LinearLayout layout = diceLayouts[i];
                 EditText editText = (EditText) layout.getChildAt(2);
-                int d = editText.getText().toString().trim().length() == 0 ?
-                        0 : Integer.parseInt(editText.getText().toString());
+                int d = (editText.getText().toString().trim().length() == 0) ? 0 : Integer.parseInt(editText.getText().toString());
                 int[] rolls = dices[i].roll(d);
                 int tmp = Arrays.stream(rolls).sum();
                 sum += tmp;
@@ -80,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
 
         sumView = new TextView(context);
         sumView.setText("");
-        sumView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        sumView.setLayoutParams(viewParams);
         sumView.setTextColor(Color.YELLOW);
         sumView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         sumView.setTextAppearance(android.R.style.TextAppearance_Large);

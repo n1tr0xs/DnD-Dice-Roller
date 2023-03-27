@@ -27,27 +27,12 @@ public class RepeatListener implements OnTouchListener {
     private final OnClickListener clickListener;
     private View touchedView;
 
-    private final Runnable handlerRunnable = new Runnable() {
-        @Override
-        public void run() {
-            if(touchedView.isEnabled()) {
-                handler.postDelayed(this, normalInterval);
-                clickListener.onClick(touchedView);
-            } else {
-                // if the view was disabled by the clickListener, remove the callback
-                handler.removeCallbacks(handlerRunnable);
-                touchedView.setPressed(false);
-                touchedView = null;
-            }
-        }
-    };
-
     /**
      * @param initialInterval The interval after first click event
-     * @param normalInterval The interval after second and subsequent click
-     *       events
-     * @param clickListener The OnClickListener, that will be called
-     *       periodically
+     * @param normalInterval  The interval after second and subsequent click
+     *                        events
+     * @param clickListener   The OnClickListener, that will be called
+     *                        periodically
      */
     public RepeatListener(int initialInterval, int normalInterval,
                           OnClickListener clickListener) {
@@ -59,7 +44,20 @@ public class RepeatListener implements OnTouchListener {
         this.initialInterval = initialInterval;
         this.normalInterval = normalInterval;
         this.clickListener = clickListener;
-    }
+    }    private final Runnable handlerRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (touchedView.isEnabled()) {
+                handler.postDelayed(this, normalInterval);
+                clickListener.onClick(touchedView);
+            } else {
+                // if the view was disabled by the clickListener, remove the callback
+                handler.removeCallbacks(handlerRunnable);
+                touchedView.setPressed(false);
+                touchedView = null;
+            }
+        }
+    };
 
     @SuppressLint("ClickableViewAccessibility")
     public boolean onTouch(View view, MotionEvent motionEvent) {
@@ -81,5 +79,7 @@ public class RepeatListener implements OnTouchListener {
 
         return false;
     }
+
+
 
 }
