@@ -56,10 +56,10 @@ public class MainActivity extends AppCompatActivity {
             mainLayout.addView(layout);
         }
 
-        Button button = new Button(context);
-        button.setText("Roll");
-        button.setLayoutParams(mainLayoutBtnParams);
-        button.setOnClickListener(view -> {
+        Button buttonRoll = new Button(context);
+        buttonRoll.setText("Roll");
+        buttonRoll.setLayoutParams(mainLayoutBtnParams);
+        buttonRoll.setOnClickListener(view -> {
             int sum = 0;
             for (int i = 0; i < diceLayouts.length; ++i) {
                 LinearLayout layout = diceLayouts[i];
@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
             }
             sumView.setText(String.valueOf(sum));
         });
-        mainLayout.addView(button);
+        mainLayout.addView(buttonRoll);
 
         for (int i = 0; i < texts.length; ++i) {
             TextView resultView = new TextView(context);
