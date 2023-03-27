@@ -138,6 +138,7 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout layout = new LinearLayout(parentContext);
         layout.setOrientation(LinearLayout.HORIZONTAL);
         layout.setLayoutParams(layoutParams);
+        layout.setPadding(0, 10, 30, 10);
         Context layoutContext = layout.getContext();
 
         // dice textview creating aka "dice label"
