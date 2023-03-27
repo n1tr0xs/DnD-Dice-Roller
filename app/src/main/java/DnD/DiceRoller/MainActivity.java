@@ -64,8 +64,12 @@ public class MainActivity extends AppCompatActivity {
             for (int i = 0; i < diceLayouts.length; ++i) {
                 LinearLayout layout = diceLayouts[i];
                 EditText editText = (EditText) layout.getChildAt(EDIT_TEXT_INDEX);
+                CheckBox
+                        checkAdv = (CheckBox) layout.getChildAt(4),
+                        checkDis = (CheckBox) layout.getChildAt(5);
+
                 int d = (editText.getText().toString().trim().length() == 0) ? 0 : Integer.parseInt(editText.getText().toString());
-                int[] rolls = dices[i].roll(d);
+                int[] rolls = dices[i].roll(d, checkAdv.isChecked(), checkDis.isChecked());
                 int tmp = Arrays.stream(rolls).sum();
                 sum += tmp;
                 resultViews[i].setText(dices[i].getName() + ": " + Arrays.toString(rolls) + " = " + tmp);

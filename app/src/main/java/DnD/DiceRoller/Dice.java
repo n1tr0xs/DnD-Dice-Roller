@@ -13,6 +13,17 @@ public class Dice {
         max = m;
     }
 
+
+    public int[] roll(int d, boolean adv, boolean dis) {
+        int[] rolls = new int[d];
+        for (int i = 0; i < d; ++i)
+            if (adv)
+                rolls[i] = Math.max(random.nextInt(max) + 1, random.nextInt(max) + 1);
+            else
+                rolls[i] = Math.min(random.nextInt(max) + 1, random.nextInt(max) + 1);
+        return rolls;
+    }
+
     public int[] roll(int d) {
         int[] rolls = new int[d];
         for (int i = 0; i < d; ++i)
@@ -24,13 +35,6 @@ public class Dice {
         return roll(1);
     }
 
-    public int adv_roll(){
-        return Math.max(random.nextInt(max) + 1, random.nextInt(max) + 1);
-    }
-
-    public int dis_roll(){
-        return Math.min(random.nextInt(max) + 1, random.nextInt(max) + 1);
-    }
     @SuppressLint("DefaultLocale")
     public String getName() {
         return String.format("d%d", max);
