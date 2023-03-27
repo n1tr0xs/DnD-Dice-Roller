@@ -53,19 +53,22 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // main layout creating
         mainLayout = new LinearLayout(this);
         mainLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         mainLayout.setOrientation(LinearLayout.VERTICAL);
         setContentView(mainLayout);
 
-        Context context = mainLayout.getContext();
+        Context mainLayoutContext = mainLayout.getContext();
+        // dice layouts creating
         for (int i = 0; i < texts.length; ++i) {
-            LinearLayout layout = createDiceLayout(context, texts[i]);
+            LinearLayout layout = createDiceLayout(mainLayoutContext, texts[i]);
             diceLayouts[i] = layout;
             mainLayout.addView(layout);
         }
 
-        Button buttonRoll = new Button(context);
+        // roll button creating
+        Button buttonRoll = new Button(mainLayoutContext);
         buttonRoll.setText("Roll");
         buttonRoll.setLayoutParams(mainLayoutBtnParams);
         buttonRoll.setOnClickListener(view -> {
@@ -87,8 +90,9 @@ public class MainActivity extends AppCompatActivity {
         });
         mainLayout.addView(buttonRoll);
 
+        // result textviews creating
         for (int i = 0; i < texts.length; ++i) {
-            TextView resultView = new TextView(context);
+            TextView resultView = new TextView(mainLayoutContext);
             resultView.setText("");
             resultView.setLayoutParams(viewParams);
             resultView.setTextColor(Color.GREEN);
@@ -96,7 +100,8 @@ public class MainActivity extends AppCompatActivity {
             mainLayout.addView(resultView);
         }
 
-        sumView = new TextView(context);
+        // sum textview creating
+        sumView = new TextView(mainLayoutContext);
         sumView.setText("");
         sumView.setLayoutParams(viewParams);
         sumView.setTextColor(Color.YELLOW);
@@ -104,7 +109,8 @@ public class MainActivity extends AppCompatActivity {
         sumView.setTextAppearance(android.R.style.TextAppearance_Large);
         mainLayout.addView(sumView);
 
-        Button btnReset = new Button(context);
+        // reset button creating
+        Button btnReset = new Button(mainLayoutContext);
         btnReset.setText("Reset");
         btnReset.setLayoutParams(mainLayoutBtnParams);
         btnReset.setOnLongClickListener(view -> {
@@ -128,18 +134,21 @@ public class MainActivity extends AppCompatActivity {
     @NonNull
     @SuppressLint({"ClickableViewAccessibility", "SetTextI18n"})
     private LinearLayout createDiceLayout(Context parentContext, String text) {
+        // dice layout creating
         LinearLayout layout = new LinearLayout(parentContext);
         layout.setOrientation(LinearLayout.HORIZONTAL);
         layout.setLayoutParams(layoutParams);
-        Context context = layout.getContext();
+        Context layoutContext = layout.getContext();
 
-        TextView textView = new TextView(context);
+        // dice textview creating aka "dice label"
+        TextView textView = new TextView(layoutContext);
         textView.setText(text);
         textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
         textView.setLayoutParams(new LinearLayout.LayoutParams(100, ViewGroup.LayoutParams.WRAP_CONTENT));
         layout.addView(textView);
 
-        Button buttonMinus = new Button(context);
+        // minus button creating
+        Button buttonMinus = new Button(layoutContext);
         buttonMinus.setText("-");
         buttonMinus.setLayoutParams(diceLayoutBtnParams);
         buttonMinus.setOnClickListener(view -> {
@@ -158,7 +167,8 @@ public class MainActivity extends AppCompatActivity {
         }));
         layout.addView(buttonMinus);
 
-        EditText editText = new EditText(context);
+        // dice edittext creating
+        EditText editText = new EditText(layoutContext);
         editText.setInputType(InputType.TYPE_CLASS_NUMBER);
         editText.setText("0");
         editText.setLayoutParams(viewParams);
@@ -170,7 +180,8 @@ public class MainActivity extends AppCompatActivity {
         });
         layout.addView(editText);
 
-        Button buttonPlus = new Button(context);
+        // plus button creating
+        Button buttonPlus = new Button(layoutContext);
         buttonPlus.setText("+");
         buttonPlus.setLayoutParams(diceLayoutBtnParams);
         buttonPlus.setOnClickListener(view -> {
@@ -189,25 +200,25 @@ public class MainActivity extends AppCompatActivity {
         }));
         layout.addView(buttonPlus);
 
-        CheckBox checkAdv = new CheckBox(context);
+        // advantage checkbox creating
+        CheckBox checkAdv = new CheckBox(layoutContext);
         checkAdv.setText("Adv");
         checkAdv.setLayoutParams(diceLayoutCheckParams);
         layout.addView(checkAdv);
 
-        CheckBox checkDis = new CheckBox(context);
+        // disadvantage checkbox creating
+        CheckBox checkDis = new CheckBox(layoutContext);
         checkDis.setText("Dis");
         checkDis.setLayoutParams(diceLayoutCheckParams);
         layout.addView(checkDis);
 
         checkAdv.setOnCheckedChangeListener((compoundButton, b) -> {
-            if (checkAdv.isChecked())
-                if (checkDis.isChecked())
-                    checkDis.setChecked(false);
+            if (checkAdv.isChecked() && checkDis.isChecked())
+                checkDis.setChecked(false);
         });
         checkDis.setOnCheckedChangeListener((compoundButton, b) -> {
-            if (checkDis.isChecked())
-                if (checkAdv.isChecked())
-                    checkAdv.setChecked(false);
+            if (checkDis.isChecked() && checkAdv.isChecked())
+                checkAdv.setChecked(false);
         });
 
         return layout;
