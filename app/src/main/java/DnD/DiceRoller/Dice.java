@@ -24,6 +24,13 @@ public class Dice {
         return roll(1);
     }
 
+    public int adv_roll(){
+        return Math.max(random.nextInt(max) + 1, random.nextInt(max) + 1);
+    }
+
+    public int dis_roll(){
+        return Math.min(random.nextInt(max) + 1, random.nextInt(max) + 1);
+    }
     @SuppressLint("DefaultLocale")
     public String getName() {
         return String.format("d%d", max);

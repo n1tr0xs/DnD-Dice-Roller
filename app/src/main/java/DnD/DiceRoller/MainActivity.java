@@ -8,17 +8,19 @@ import android.text.InputType;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
     int EDIT_TEXT_INDEX = 2;
-    public Dice[] dices = new Dice[]{
+    public Dice[] dices = {
             new Dice(20),
             new Dice(12),
             new Dice(10),
@@ -27,13 +29,15 @@ public class MainActivity extends AppCompatActivity {
             new Dice(4),
     };
     LinearLayout mainLayout;
-    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-    LinearLayout.LayoutParams viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
-    LinearLayout.LayoutParams mainLayoutBtnParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
-    LinearLayout.LayoutParams diceLayoutBtnParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
     LinearLayout[] diceLayouts = new LinearLayout[dices.length];
     TextView[] resultViews = new TextView[dices.length];
     TextView sumView;
+    LinearLayout.LayoutParams
+            layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT),
+            viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1),
+            mainLayoutBtnParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT),
+            diceLayoutBtnParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT),
+            diceLayoutCheckParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -102,7 +106,8 @@ public class MainActivity extends AppCompatActivity {
         mainLayout.addView(btnReset);
     }
 
-    @SuppressLint("ClickableViewAccessibility")
+    @NonNull
+    @SuppressLint({"ClickableViewAccessibility", "SetTextI18n"})
     private LinearLayout createDiceLayout(Context parentContext, String text) {
         LinearLayout layout = new LinearLayout(parentContext);
         layout.setOrientation(LinearLayout.HORIZONTAL);
@@ -164,6 +169,27 @@ public class MainActivity extends AppCompatActivity {
                 editText12.setText(String.valueOf(Integer.parseInt(editText12.getText().toString()) + 1));
         }));
         layout.addView(buttonPlus);
+
+        CheckBox checkAdv = new CheckBox(context);
+        checkAdv.setText("Adv");
+        checkAdv.setLayoutParams(diceLayoutCheckParams);
+        layout.addView(checkAdv);
+
+        CheckBox checkDis = new CheckBox(context);
+        checkDis.setText("Dis");
+        checkDis.setLayoutParams(diceLayoutCheckParams);
+        layout.addView(checkDis);
+
+        checkAdv.setOnCheckedChangeListener((compoundButton, b) -> {
+            if (checkAdv.isChecked())
+                if (checkDis.isChecked())
+                    checkDis.setChecked(false);
+        });
+        checkDis.setOnCheckedChangeListener((compoundButton, b) -> {
+            if (checkDis.isChecked())
+                if (checkAdv.isChecked())
+                    checkAdv.setChecked(false);
+        });
 
         return layout;
     }
