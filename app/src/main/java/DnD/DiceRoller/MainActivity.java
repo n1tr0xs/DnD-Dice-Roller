@@ -90,13 +90,14 @@ public class MainActivity extends AppCompatActivity {
         Button btnReset = new Button(context);
         btnReset.setText("Reset");
         btnReset.setLayoutParams(mainLayoutBtnParams);
-        btnReset.setOnClickListener(view -> {
-            for (int i=0; i<diceLayouts.length; ++i) {
+        btnReset.setOnLongClickListener(view -> {
+            for (int i = 0; i < diceLayouts.length; ++i) {
                 EditText editText = (EditText) diceLayouts[i].getChildAt(EDIT_TEXT_INDEX);
                 editText.setText("0");
                 resultViews[i].setText("");
             }
             sumView.setText("");
+            return true;
         });
         mainLayout.addView(btnReset);
     }
