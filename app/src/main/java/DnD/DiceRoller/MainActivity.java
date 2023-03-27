@@ -109,8 +109,14 @@ public class MainActivity extends AppCompatActivity {
         btnReset.setLayoutParams(mainLayoutBtnParams);
         btnReset.setOnLongClickListener(view -> {
             for (int i = 0; i < diceLayouts.length; ++i) {
-                EditText editText = (EditText) diceLayouts[i].getChildAt(EDIT_TEXT_INDEX);
+                LinearLayout layout = diceLayouts[i];
+                EditText editText = (EditText) layout.getChildAt(EDIT_TEXT_INDEX);
+                CheckBox
+                        checkAdv = (CheckBox) layout.getChildAt(ADV_CHECK_INDEX),
+                        checkDis = (CheckBox) layout.getChildAt(DIS_CHECK_INDEX);
                 editText.setText("0");
+                checkAdv.setChecked(false);
+                checkDis.setChecked(false);
                 resultViews[i].setText("");
             }
             sumView.setText("");
