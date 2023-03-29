@@ -12,6 +12,7 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -120,6 +121,7 @@ public class MainActivity extends AppCompatActivity {
                 CheckBox
                         checkAdv = (CheckBox) layout.getChildAt(ADV_CHECK_INDEX),
                         checkDis = (CheckBox) layout.getChildAt(DIS_CHECK_INDEX);
+
                 editText.setText("0");
                 checkAdv.setChecked(false);
                 checkDis.setChecked(false);
