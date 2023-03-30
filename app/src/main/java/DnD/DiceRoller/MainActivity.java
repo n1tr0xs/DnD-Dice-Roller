@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.text.InputType;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -13,7 +12,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Arrays;
@@ -43,11 +41,8 @@ public class MainActivity extends AppCompatActivity {
     TextView[] resultViews = new TextView[dices.length];
     TextView sumView;
     LinearLayout.LayoutParams
-            layoutParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT),
-            viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1),
             mainLayoutBtnParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT),
-            diceLayoutBtnParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT),
-            diceLayoutCheckParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            viewParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -58,11 +53,11 @@ public class MainActivity extends AppCompatActivity {
         mainLayout.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         mainLayout.setOrientation(LinearLayout.VERTICAL);
         setContentView(mainLayout);
-
         Context mainLayoutContext = mainLayout.getContext();
+
         // dice layouts creating
         for (int i = 0; i < texts.length; ++i) {
-            LinearLayout layout = createDiceLayout(mainLayoutContext, texts[i]);
+            LinearLayout layout = new DiceLayout(mainLayoutContext, texts[i]);
             diceLayouts[i] = layout;
             mainLayout.addView(layout);
         }
@@ -84,7 +79,12 @@ public class MainActivity extends AppCompatActivity {
                 int[] rolls = dices[i].roll(d, checkAdv.isChecked(), checkDis.isChecked());
                 int tmp = Arrays.stream(rolls).sum();
                 sum += tmp;
-                resultViews[i].setText(dices[i].getName() + ": " + Arrays.toString(rolls) + " = " + tmp);
+                String info = "";
+                if (checkAdv.isChecked())
+                    info = " adv";
+                else if (checkDis.isChecked())
+                    info = " dis";
+                resultViews[i].setText(dices[i].getName() + info + ": " + Arrays.toString(rolls) + " = " + tmp);
             }
             sumView.setText(String.valueOf(sum));
         });
@@ -131,99 +131,4 @@ public class MainActivity extends AppCompatActivity {
         });
         mainLayout.addView(btnReset);
     }
-
-    @NonNull
-    @SuppressLint({"ClickableViewAccessibility", "SetTextI18n"})
-    private LinearLayout createDiceLayout(Context parentContext, String text) {
-        // dice layout creating
-        LinearLayout layout = new LinearLayout(parentContext);
-        layout.setOrientation(LinearLayout.HORIZONTAL);
-        layout.setLayoutParams(layoutParams);
-        layout.setPadding(0, 10, 30, 10);
-        Context layoutContext = layout.getContext();
-
-        // dice textview creating aka "dice label"
-        TextView textView = new TextView(layoutContext);
-        textView.setText(text);
-        textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-        textView.setLayoutParams(new LinearLayout.LayoutParams(100, ViewGroup.LayoutParams.WRAP_CONTENT));
-        layout.addView(textView);
-
-        // minus button creating
-        Button buttonMinus = new Button(layoutContext);
-        buttonMinus.setText("-");
-        buttonMinus.setLayoutParams(diceLayoutBtnParams);
-        buttonMinus.setOnClickListener(view -> {
-            EditText editText = (EditText) layout.getChildAt(EDIT_TEXT_INDEX);
-            if (editText.getText().toString().trim().length() == 0)
-                editText.setText("1");
-            else
-                editText.setText(String.valueOf(Math.max(Integer.parseInt(editText.getText().toString()) - 1, 0)));
-        });
-        buttonMinus.setOnTouchListener(new RepeatListener(400, 100, view -> {
-            EditText editText = (EditText) layout.getChildAt(EDIT_TEXT_INDEX);
-            if (editText.getText().toString().trim().length() == 0)
-                editText.setText("1");
-            else
-                editText.setText(String.valueOf(Math.max(Integer.parseInt(editText.getText().toString()) - 1, 0)));
-        }));
-        layout.addView(buttonMinus);
-
-        // dice edittext creating
-        EditText editText = new EditText(layoutContext);
-        editText.setInputType(InputType.TYPE_CLASS_NUMBER);
-        editText.setText("0");
-        editText.setLayoutParams(viewParams);
-        editText.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-        editText.setMaxLines(1);
-        editText.setOnClickListener(view -> {
-            EditText e = (EditText) view;
-            e.setSelection(0, e.getText().toString().length());
-        });
-        layout.addView(editText);
-
-        // plus button creating
-        Button buttonPlus = new Button(layoutContext);
-        buttonPlus.setText("+");
-        buttonPlus.setLayoutParams(diceLayoutBtnParams);
-        buttonPlus.setOnClickListener(view -> {
-            EditText editText1 = (EditText) layout.getChildAt(EDIT_TEXT_INDEX);
-            if (editText1.getText().toString().trim().length() == 0)
-                editText1.setText("1");
-            else
-                editText1.setText(String.valueOf(Integer.parseInt(editText1.getText().toString()) + 1));
-        });
-        buttonPlus.setOnTouchListener(new RepeatListener(400, 100, view -> {
-            EditText editText12 = (EditText) layout.getChildAt(EDIT_TEXT_INDEX);
-            if (editText12.getText().toString().trim().length() == 0)
-                editText12.setText("1");
-            else
-                editText12.setText(String.valueOf(Integer.parseInt(editText12.getText().toString()) + 1));
-        }));
-        layout.addView(buttonPlus);
-
-        // advantage checkbox creating
-        CheckBox checkAdv = new CheckBox(layoutContext);
-        checkAdv.setText("Adv");
-        checkAdv.setLayoutParams(diceLayoutCheckParams);
-        layout.addView(checkAdv);
-
-        // disadvantage checkbox creating
-        CheckBox checkDis = new CheckBox(layoutContext);
-        checkDis.setText("Dis");
-        checkDis.setLayoutParams(diceLayoutCheckParams);
-        layout.addView(checkDis);
-
-        checkAdv.setOnCheckedChangeListener((compoundButton, b) -> {
-            if (checkAdv.isChecked() && checkDis.isChecked())
-                checkDis.setChecked(false);
-        });
-        checkDis.setOnCheckedChangeListener((compoundButton, b) -> {
-            if (checkDis.isChecked() && checkAdv.isChecked())
-                checkAdv.setChecked(false);
-        });
-
-        return layout;
-    }
-
 }
